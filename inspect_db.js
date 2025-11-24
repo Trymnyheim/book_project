@@ -1,7 +1,7 @@
 require('dotenv').config();
 const { Pool } = require('pg');
 
-const connectionString = process.env.DATABASE_URL || 'postgresql://postgres:chebly@localhost:5432/libary';
+const connectionString = process.env.DATABASE_URL || 'postgresql://library_admin:test123@localhost:5432/libary';
 
 const pool = new Pool({ connectionString });
 
