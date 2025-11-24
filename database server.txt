@@ -1,0 +1,66 @@
+-- Create extension for UUIDs (optional)
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- USERS (customers, librarians, admin)
+CREATE TABLE users (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name TEXT NOT NULL,
+  email TEXT UNIQUE NOT NULL,
+  role TEXT NOT NULL DEFAULT 'customer', -- 'customer' | 'librarian' | 'admin'
+  subscribed BOOLEAN NOT NULL DEFAULT FALSE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+-- BOOKS
+CREATE TABLE books (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  title TEXT NOT NULL,
+  author TEXT NOT NULL,
+  publisher TEXT,
+  isbn TEXT,
+  total_copies INT NOT NULL DEFAULT 1,
+  available_copies INT NOT NULL DEFAULT 1,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+-- RENTALS (lending history)
+CREATE TABLE rentals (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  book_id UUID REFERENCES books(id) ON DELETE CASCADE,
+  user_id UUID REFERENCES users(id) ON DELETE SET NULL,
+  rented_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+  returned_at TIMESTAMP WITH TIME ZONE,
+  due_date TIMESTAMP WITH TIME ZONE,
+  status TEXT NOT NULL DEFAULT 'rented' -- 'rented' | 'returned' | 'overdue'
+);
+
+-- PURCHASES/SALES (optional tracking)
+CREATE TABLE transactions (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  book_id UUID REFERENCES books(id) ON DELETE CASCADE,
+  type TEXT NOT NULL, -- 'purchase' | 'sale'
+  quantity INT NOT NULL,
+  amount NUMERIC(10,2) DEFAULT 0,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+-- Indexes for search
+CREATE INDEX idx_books_title ON books USING gin (to_tsvector('english', title));
+CREATE INDEX idx_books_author ON books USING gin (to_tsvector('english', author));
+
+-- Sample seed data
+INSERT INTO users (name, email, role, subscribed) VALUES
+('Alice Customer','alice@example.com','customer', true),
+('Bob Librarian','bob@example.com','librarian', false),
+('Owner Admin','owner@example.com','admin', true);
+
+INSERT INTO books (title, author, publisher, isbn, total_copies, available_copies) VALUES
+('Clean Code','Robert C. Martin','Prentice Hall','9780132350884', 3, 3),
+('Introduction to Algorithms','Cormen et al.','MIT Press','9780262033848', 2, 2),
+('Eloquent JavaScript','Marijn Haverbeke','No Starch','9781593279509', 1, 1);
+
+-- sample rental (Alice rents Clean Code)
+INSERT INTO rentals (book_id, user_id, due_date) 
+SELECT b.id, u.id, now() + interval '14 days'
+FROM books b, users u
+WHERE b.title = 'Clean Code' AND u.email = 'alice@example.com';
