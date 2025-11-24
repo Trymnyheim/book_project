@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Library Demo</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <header class="header">
+      <h1>Library Demo</h1>
+      <div class="header-actions">
+        <div class="stat" id="stat-total">Books: —</div>
+        <div class="stat" id="stat-lent">Lent: —</div>
+        <div class="stat" id="stat-subs">Subscribers: —</div>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="search">
+        <div class="fields">
+          <input id="qTitle" placeholder="Title" />
+          <input id="qAuthor" placeholder="Author" />
+          <label class="chk"><input type="checkbox" id="qAvailable" /> Available only</label>
+          <button id="searchBtn" class="btn primary">Search</button>
+        </div>
+        <div class="help">Tip: click a book to see details & rent.</div>
+      </section>
+
+      <section class="content">
+        <div id="books" class="books-grid"></div>
+
+        <aside class="sidebar">
+          <div class="card">
+            <h3>Quick Rent</h3>
+            <p>Enter your user id to view history or rent (for demo use the sample user id from DB):</p>
+            <input id="userId" placeholder="User ID" />
+            <div class="actions">
+              <button id="viewHistory" class="btn">View History</button>
+            </div>
+            <div id="history" class="history"></div>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <!-- Modal -->
+    <div id="modal" class="modal hidden">
+      <div class="modal-content">
+        <button id="closeModal" class="close">×</button>
+        <div id="modalBody"></div>
+      </div>
+    </div>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
