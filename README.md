@@ -1,24 +1,19 @@
 # Book Project
 
+This project is done in the class Information Systems Design at ECE Paris.
 This is a minimal demo server and UI that connects to an existing PostgreSQL database named `libary` (user-provided DB). It demonstrates basic library features: listing/searching books, renting/returning books, and viewing user history.
 
 ## Quick start
 
-1. Open a PowerShell terminal in the `server` folder:
+1. Make sure server/.env contains database credentials
 
-```powershell
-cd "c:/Users/chebl/Documents/Ece/Semster1/information systems/server"
-```
-
-2. Make sure server/.env contains database credentials
-
-3. Install dependencies:
+2. Install dependencies:
 
 ```powershell
 npm install
 ```
 
-4. Start the server:
+3. Start the server:
 
 ```powershell
 npm start
@@ -26,7 +21,7 @@ npm start
 
 Server listens on port 3000 and binds to all interfaces (0.0.0.0).
 
-5. Open the demo UI in a browser:
+4. Open the demo UI in a browser:
 
 http://127.0.0.1:3000/
 
