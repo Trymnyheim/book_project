@@ -19,7 +19,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // API prefix
 const api = express.Router();
 
-// List books with optional filters: title, author, available (true|false)
+// List books with optional filters
 api.get('/books', async (req, res) => {
   try {
     const { title, author, available, limit, offset } = req.query;
@@ -42,7 +42,7 @@ api.get('/books/:id', async (req, res) => {
   }
 });
 
-// Add a new book (simple; no auth)
+// Add a new book 
 api.post('/books', async (req, res) => {
   try {
     const { title, author, publisher, isbn, total_copies } = req.body;
