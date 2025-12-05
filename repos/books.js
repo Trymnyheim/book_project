@@ -23,7 +23,7 @@ async function list({ title, author, available, limit = 100, offset = 0 }) {
   }
 
   const where = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
-  // Order available books first, then by title to show all books up-front by default
+  // Order available books first, then by title to show all the books up-front by default
   const q = `SELECT * FROM books ${where} ORDER BY (available_copies > 0) DESC, title LIMIT $${idx++} OFFSET $${idx++}`;
   params.push(limit, offset);
   const r = await db.query(q, params);
