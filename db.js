@@ -1,10 +1,11 @@
-const { Pool } = require('pg');   
+require('dotenv').config();
+const { Pool } = require('pg');
 
-const connectionString = process.env.DATABASE_URL || 'postgresql://postgres:chebly@localhost:5432/libary';
+const connectionString =
+  process.env.DATABASE_URL ||
+  'postgresql://library_admin:test123@localhost:5432/libary';
 
-const pool = new Pool({
-  connectionString,
-});
+const pool = new Pool({ connectionString });
 
 pool.connect()
   .then(client => {
@@ -14,6 +15,7 @@ pool.connect()
   .catch(err => {
     console.error('❌ Error connecting to the PostgreSQL database:', err.stack);
   });
+
 module.exports = {
   query: (text, params) => pool.query(text, params),
   pool
