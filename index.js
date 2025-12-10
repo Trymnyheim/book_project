@@ -8,10 +8,17 @@ const db = require('./db');
 const booksRepo = require('./repos/books');
 const rentalsRepo = require('./repos/rentals');
 const usersRepo = require('./repos/users');
+const authRoutes = require('./routes/auth');
+const auth = require('./middleware/auth');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// Serve student portal at /student (keep original index.html as default)
+app.get('/student', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'student.html'));
+});
 
 // Serve static UI
 app.use(express.static(path.join(__dirname, 'public')));
@@ -79,11 +86,12 @@ api.delete('/books/:id', async (req, res) => {
 });
 
 // Create rental
-api.post('/rentals', async (req, res) => {
+api.post('/rentals', auth.optionalAuth, async (req, res) => {
   try {
     const { book_id, user_id, due_date } = req.body;
-    if (!book_id || !user_id) return res.status(400).json({ error: 'missing_fields' });
-    const rental = await rentalsRepo.create({ book_id, user_id, due_date });
+    const uid = req.user ? req.user.id : user_id;
+    if (!book_id || !uid) return res.status(400).json({ error: 'missing_fields' });
+    const rental = await rentalsRepo.create({ book_id, user_id: uid, due_date });
     res.status(201).json(rental);
   } catch (err) {
     console.error(err);
@@ -128,6 +136,8 @@ api.get('/stats', async (req, res) => {
 });
 
 app.use('/api', api);
+// Auth routes for students (signup/login)
+app.use('/api/auth', authRoutes);
 
 const port = process.env.PORT || 3000;
 // listen on all interfaces so both localhost and 127.0.0.1 work reliably on all platforms

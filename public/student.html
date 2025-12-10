@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Student - Library</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Student Portal</h1>
+
+      <section id="auth">
+        <h2>Sign Up</h2>
+        <form id="signup-form">
+          <input name="name" placeholder="Full name" />
+          <input name="email" type="email" placeholder="Email" />
+          <input name="password" type="password" placeholder="Password" />
+          <button type="submit">Sign Up</button>
+        </form>
+
+        <h2>Login</h2>
+        <form id="login-form">
+          <input name="email" type="email" placeholder="Email" />
+          <input name="password" type="password" placeholder="Password" />
+          <button type="submit">Login</button>
+        </form>
+      </section>
+
+      <section id="student-area" style="display:none;">
+        <h2>Welcome, <span id="student-name"></span></h2>
+        <button id="logout">Logout</button>
+        <h3>Books</h3>
+        <div id="books"></div>
+      </section>
+    </main>
+
+    <script src="/student.js"></script>
+  </body>
+</html>
